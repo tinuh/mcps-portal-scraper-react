@@ -7,7 +7,7 @@ function Home(){
 
   function login_portal(username, password) {
     // setTimeout(() => setShowLogin(false), 5000);
-    window.open("https://portal.mcpsmd.net");
+    window.open("https://portal.mcpsmd.org");
 
   }
 
