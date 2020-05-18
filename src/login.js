@@ -1,37 +1,55 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import './App.css';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-function login_scrape(){
-    return new Promise((resolve) => setTimeout(resolve, 2000));
-}
+class Login extends React.Component {
+    constructor(props) {
+        super(props);
 
-function Login() {
-  const [isLoading, setLoading] = useState(false);
+        this.login_portal = props.login_portal
 
-  useEffect(() => {
-    if (isLoading) {
-      login_scrape().then(() => {
-        setLoading(false);
-      });
+        this.state = {
+            loading: false,
+            username: "",
+            password: ""
+        };
     }
-  }, [isLoading]);
 
-  const handleClick = () => setLoading(true);
+    handleUsernameChange = (event) => {
+        this.setState(
+            { username: event.target.value }
+        )
+    }
+    
+    handlePasswordChange = (event) => {
+        this.setState(
+            { password: event.target.value }
+        )
+    }
 
-  return (
-    <div className="Login">
-      <h1 className = "heading">Login with MCPS Credentials</h1><br />
-      <div className="login-div">
-          <Form>
-            <Form.Control size = "lg" type="text"  placeholder="MCPS ID" /><br />
-            <Form.Control size = "lg" type="password" placeholder="Password" /><br />
-            <Button size = "lg" disabled={isLoading} onClick={!isLoading ? handleClick : null} className = "login-btn" variant="outline-light">{isLoading ? 'Logging in…' : 'Login'}</Button>
-          </Form>
-      </div>
-    </div>
-  );
+    handleSubmit = (event) => {
+        this.setState(
+            { loading: true }
+        )
+        event.preventDefault();
+        this.login_portal(this.state.username, this.state.password);
+    }
+
+  render(){
+      return (
+          <div className="Login">
+              <h1 className="heading">Login with MCPS Credentials</h1><br/>
+              <div className="login-div">
+                  <form onSubmit={this.handleSubmit}>
+                      <Form.Control size="lg" type="text" value = {this.state.username} onChange={this.handleUsernameChange} placeholder="MCPS ID"/><br/>
+                      <Form.Control size="lg" type="password" value = {this.state.password} onChange={this.handlePasswordChange} placeholder="Password"/><br/>
+                      <Button type="submit" size="lg" disabled={this.state.loading} className="login-btn" variant="outline-light">{this.state.loading ? 'Logging in…' : 'Login'}</Button>
+                  </form>
+              </div>
+          </div>
+        );
+  }
 }
 
 export default Login;
